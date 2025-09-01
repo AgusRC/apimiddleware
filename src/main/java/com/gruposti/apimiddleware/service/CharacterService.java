@@ -1,6 +1,8 @@
 package com.gruposti.apimiddleware.service;
 
+import com.gruposti.apimiddleware.model.CharacterDetailInfo;
 import com.gruposti.apimiddleware.model.DataGenericResponse;
+import com.gruposti.apimiddleware.model.GameIndices;
 import com.gruposti.apimiddleware.model.PokeApiResponse;
 import com.gruposti.apimiddleware.util.AppConstants;
 
@@ -19,7 +21,7 @@ public class CharacterService {
     @Autowired
     private RestTemplate restTemplate;
 
-    public DataGenericResponse getPokemonCharacter() {
+    public DataGenericResponse<PokeApiResponse> getPokemonCharacter() {
     	HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
@@ -30,10 +32,33 @@ public class CharacterService {
                 PokeApiResponse.class
         );
         
-        DataGenericResponse dataResponse = new DataGenericResponse();
+        DataGenericResponse<PokeApiResponse> dataResponse = new DataGenericResponse();
         
         if(response.getStatusCode() == HttpStatus.OK) {
         	response.getBody().setItems(response.getBody().getResults().length);
+            dataResponse.setAction(AppConstants.ACTION_CONTINUE);
+            dataResponse.setType(AppConstants.TYPE_SUCCESS);
+            dataResponse.setData(response.getBody());
+        }
+        
+        return dataResponse;
+    }
+    
+    public DataGenericResponse<CharacterDetailInfo> getPokemonCharacterById(String pokemonId) {
+    	HttpHeaders headers = new HttpHeaders();
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        ResponseEntity<CharacterDetailInfo> response = restTemplate.exchange(
+                API_URL+"/"+pokemonId,
+                HttpMethod.GET,
+                entity,
+                CharacterDetailInfo.class
+        );
+        
+        DataGenericResponse<CharacterDetailInfo> dataResponse = new DataGenericResponse<CharacterDetailInfo>();
+        
+        if(response.getStatusCode() == HttpStatus.OK) {
+        	
             dataResponse.setAction(AppConstants.ACTION_CONTINUE);
             dataResponse.setType(AppConstants.TYPE_SUCCESS);
             dataResponse.setData(response.getBody());

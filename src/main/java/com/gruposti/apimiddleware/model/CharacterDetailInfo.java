@@ -1,12 +1,11 @@
 package com.gruposti.apimiddleware.model;
 
-public class Character {
+public class CharacterDetailInfo {
 	private int id;
 	private String name;
 	private String weight;
-	private String image;
-	private String url;
-	
+	private String height;
+	private GameIndices[] game_indices;
 	
 	public int getId() {
 		return id;
@@ -20,24 +19,23 @@ public class Character {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getImage() {
-		return image;
-	}
-	public void setImage(String image) {
-		this.image = image;
-	}
 	public String getWeight() {
 		return weight;
 	}
 	public void setWeight(String weight) {
 		this.weight = weight;
 	}
-	public String getUrl() {
-		return url;
+	public String getHeight() {
+		return height;
 	}
-	public void setUrl(String url) {
-		this.url = url;
+	public void setHeight(String height) {
+		this.height = height;
 	}
-	
+	public GameIndices[] getGame_indices() {
+		return game_indices;
+	}
+	public void setGame_indices(GameIndices[] game_indices) {
+		this.game_indices = game_indices;
+	}
 	
 }

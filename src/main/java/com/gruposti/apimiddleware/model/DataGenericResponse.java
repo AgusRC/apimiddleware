@@ -1,9 +1,9 @@
 package com.gruposti.apimiddleware.model;
 
-public class DataGenericResponse {
+public class DataGenericResponse<T> {
 	private String type;
 	private String action;
-	private PokeApiResponse data;
+	private T data;
 	
 	public String getType() {
 		return type;
@@ -17,10 +17,10 @@ public class DataGenericResponse {
 	public void setAction(String action) {
 		this.action = action;
 	}
-	public PokeApiResponse getData() {
+	public T getData() {
 		return data;
 	}
-	public void setData(PokeApiResponse data) {
+	public void setData(T data) {
 		this.data = data;
 	}
 
