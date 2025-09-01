@@ -24,7 +24,7 @@ public class STIController {
 	}
 	
 	@GetMapping("/characters")
-	public ResponseEntity<DataGenericResponse<PokeApiResponse>> getCharacters(@RequestParam("limit") Integer limit) {
+	public ResponseEntity<DataGenericResponse<PokeApiResponse>> getCharacters(@RequestParam(name = "limit", defaultValue = "25") Integer limit) {
 		return characterService.getPokemonCharacter(limit);
 	}
 	
