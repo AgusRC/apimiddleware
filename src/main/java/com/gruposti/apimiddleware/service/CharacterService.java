@@ -21,12 +21,27 @@ public class CharacterService {
     @Autowired
     private RestTemplate restTemplate;
 
-    public DataGenericResponse<PokeApiResponse> getPokemonCharacter() {
+    public ResponseEntity<DataGenericResponse<PokeApiResponse>> getPokemonCharacter(Integer limit) {
+    	
+    	if(limit<0 || limit>100) {
+    		DataGenericResponse<PokeApiResponse> errorResponse = new DataGenericResponse<>();
+            errorResponse.setAction(AppConstants.ACTION_CANCEL);
+            errorResponse.setType(AppConstants.TYPE_ERROR);
+            errorResponse.setMessage("Provided value for limits param is invalid");
+            errorResponse.setCode(AppConstants.ERROR_CODE_LIMIT);
+            errorResponse.setData(null);
+
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(errorResponse);
+
+    	}
+    	
     	HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
         ResponseEntity<PokeApiResponse> response = restTemplate.exchange(
-                API_URL+"?"+AppConstants.URL_PARAM_LIMIT_25,
+                API_URL+"?limit="+limit,
                 HttpMethod.GET,
                 entity,
                 PokeApiResponse.class
@@ -39,12 +54,17 @@ public class CharacterService {
             dataResponse.setAction(AppConstants.ACTION_CONTINUE);
             dataResponse.setType(AppConstants.TYPE_SUCCESS);
             dataResponse.setData(response.getBody());
+            
+            return ResponseEntity.ok(dataResponse);
         }
         
-        return dataResponse;
+        dataResponse.setAction(AppConstants.ACTION_CANCEL);
+        dataResponse.setType(AppConstants.TYPE_ERROR);
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(dataResponse);
     }
     
-    public DataGenericResponse<CharacterDetailInfo> getPokemonCharacterById(String pokemonId) {
+    public ResponseEntity<DataGenericResponse<CharacterDetailInfo>> getPokemonCharacterById(String pokemonId) {
     	HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
@@ -62,8 +82,13 @@ public class CharacterService {
             dataResponse.setAction(AppConstants.ACTION_CONTINUE);
             dataResponse.setType(AppConstants.TYPE_SUCCESS);
             dataResponse.setData(response.getBody());
+            
+            return ResponseEntity.ok(dataResponse);
         }
         
-        return dataResponse;
+        dataResponse.setAction(AppConstants.ACTION_CANCEL);
+        dataResponse.setType(AppConstants.TYPE_ERROR);
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(dataResponse);
     }
 }
